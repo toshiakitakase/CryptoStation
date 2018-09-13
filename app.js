@@ -28,7 +28,7 @@ app.use("/api", (function () {
         response.json(true);
     });
   
-    // POST: /api/user
+    // POST: /api
     router.post("/balance", (request, response) => {
         var body = request.body;
         if (!body.address || !body.stationId) {
@@ -36,7 +36,6 @@ app.use("/api", (function () {
         }
         var address = body.address;
         const balance = async () => {
-            // return web3.eth.getBalance("0xc38dd98280c1e3a33bb5b186ba56e0ca5aee06d1");
             return web3.eth.getBalance(address);
         }
 
@@ -90,5 +89,5 @@ app.use("/api", (function () {
  
 // start web applicaiton.
 console.log("start");
-app.listen(3000);
-// app.listen(process.env.PORT);
+// app.listen(3000);
+app.listen(process.env.PORT);
