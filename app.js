@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // set routing.
-app.use("/api/", (function () {
+app.use("/api", (function () {
     var router = express.Router();
 
     router.get("/test", (request, response) => {
