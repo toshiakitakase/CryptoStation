@@ -25,7 +25,7 @@ app.use("/api", (function () {
     var router = express.Router();
 
     router.get("/test", (request, response) => {
-        response.json(true);
+        response.json({message: "ISSHO"});
     });
   
     // POST: /api
@@ -48,28 +48,15 @@ app.use("/api", (function () {
     });
 
     router.post("/create", (request, response) => {
+    }
+
+    router.post("/create", (request, response) => {
         var body = request.body;
         if (!body.address || !body.stationId) {
             return response.json(false);
         }
         var address = body.address;
         console.log(address);
-
-        // const balance = async () => {
-        //     // return web3.eth.getBalance("0xc38dd98280c1e3a33bb5b186ba56e0ca5aee06d1");
-        //     return web3.eth.getBalance("0xe88c7a642c706c20a2d5a1bad9fc44f35cd3b58c");
-        // }
-
-        // const totalSupply = async (instance) => {
-        //     return instance.totalSupply.call();
-        // }
-          
-        // const getBalance = async () => {
-        //     const res = await balance()
-        //     console.log(res)
-        // }
-          
-        // getBalance();
 
         const Contract = truffleContract(CryptoStation);
         Contract.setProvider(web3.currentProvider);
