@@ -54,4 +54,4 @@ app.use("/api", (function () {
  
 // start web applicaiton.
 console.log("start");
-app.listen(8080);
+app.listen(process.env.PORT);
