@@ -53,4 +53,5 @@ app.use("/api", (function () {
 })());
  
 // start web applicaiton.
-app.listen(3000);
+console.log("start");
+app.listen(8080);
