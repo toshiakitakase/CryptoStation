@@ -20,6 +20,9 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const Contract = truffleContract(CryptoStation);
+Contract.setProvider(web3.currentProvider);
+
 // set routing.
 app.use("/api", (function () {
     var router = express.Router();
@@ -40,13 +43,55 @@ app.use("/api", (function () {
         }
 
         const getBalance = async () => {
-            const res = await balance()
-            console.log(res)
+            const res = await balance();
             response.json(res);
         }
         getBalance();
     });
-    
+
+    router.post("/gettoken", (request, response) => {
+        var body = request.body;
+        if (!body.address || !body.stationId) {
+            return response.json(false);
+        }
+        var address = body.address;
+
+        Contract.deployed().then(function(instance) {
+            // 総トークン数取得
+            const getBalanceOf = async () => {
+                const res = await balanceOf();
+                getTokenOfOwnerByIndex(res.c[0]);
+            }
+
+            const balanceOf = async () => {
+                return instance.balanceOf(address);
+            }
+
+            getBalanceOf();
+
+            // tokenひとつひとつ取得
+            const getTokenOfOwnerByIndex = async (number) => {
+                var array = [];
+                for (var i = 0; i < number; i++){                    
+                    const res = await tokenOfOwnerByIndex(i);
+                    console.log(res.c[0]);
+                    const uri = await tokenURI(res.c[0]);
+                    console.log(uri);
+                    array.push(uri);
+                }
+                response.json(array);
+            }
+
+            const tokenOfOwnerByIndex = async (i) => {
+                return instance.tokenOfOwnerByIndex(address, i);
+            }
+
+            const tokenURI = async (tokenId) => {
+                return instance.tokenURI(tokenId);
+            }
+        });
+    });
+
     router.post("/create", (request, response) => {
         var body = request.body;
         if (!body.address || !body.stationId) {
@@ -55,16 +100,17 @@ app.use("/api", (function () {
         var address = body.address;
         console.log(address);
 
-        const Contract = truffleContract(CryptoStation);
-        Contract.setProvider(web3.currentProvider);
-
         Contract.deployed().then(function(instance) {
+            const totalSupply = async (instance) => {
+                return instance.totalSupply();
+            }
+
             const getTotalSupply = async () => {
                 const res = await totalSupply(instance);
                 console.log(res);
             }
             getTotalSupply();
-        })
+        });
         response.json(true);
     });
  
@@ -73,5 +119,5 @@ app.use("/api", (function () {
  
 // start web applicaiton.
 console.log("start");
-// app.listen(3000);
-app.listen(process.env.PORT);
+app.listen(3000);
+// app.listen(process.env.PORT);
