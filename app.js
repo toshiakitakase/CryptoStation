@@ -119,5 +119,5 @@ app.use("/api", (function () {
  
 // start web applicaiton.
 console.log("start");
-app.listen(3000);
-// app.listen(process.env.PORT);
+// app.listen(3000);
+app.listen(process.env.PORT);
