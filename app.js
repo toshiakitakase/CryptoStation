@@ -46,10 +46,7 @@ app.use("/api", (function () {
         }
         getBalance();
     });
-
-    router.post("/create", (request, response) => {
-    }
-
+    
     router.post("/create", (request, response) => {
         var body = request.body;
         if (!body.address || !body.stationId) {
