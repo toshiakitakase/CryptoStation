@@ -29,23 +29,59 @@ app.use("/api", (function () {
     });
   
     // POST: /api/user
-    router.post("/create", (request, response) => {
+    router.post("/balance", (request, response) => {
+        var body = request.body;
+        if (!body.address || !body.stationId) {
+            return response.json(false);
+        }
+        var address = body.address;
+        const balance = async () => {
+            // return web3.eth.getBalance("0xc38dd98280c1e3a33bb5b186ba56e0ca5aee06d1");
+            return web3.eth.getBalance(address);
+        }
 
+        const getBalance = async () => {
+            const res = await balance()
+            console.log(res)
+            response.json(res);
+        }
+        getBalance();
+    });
+
+    router.post("/create", (request, response) => {
         var body = request.body;
         if (!body.address || !body.stationId) {
             return response.json(false);
         }
         var address = body.address;
         console.log(address);
-        // const Contract = truffleContract(CryptoStation);
-        // Contract.setProvider(web3.currentProvider);
 
-        // Contract.deployed().then(function(instance) {
-        //     // instance.name.call(address, {from: address});
-        //     var a = instance.name().call();
-        //     console.log(instance);
-        //     console.log("******************")
-        // })
+        // const balance = async () => {
+        //     // return web3.eth.getBalance("0xc38dd98280c1e3a33bb5b186ba56e0ca5aee06d1");
+        //     return web3.eth.getBalance("0xe88c7a642c706c20a2d5a1bad9fc44f35cd3b58c");
+        // }
+
+        // const totalSupply = async (instance) => {
+        //     return instance.totalSupply.call();
+        // }
+          
+        // const getBalance = async () => {
+        //     const res = await balance()
+        //     console.log(res)
+        // }
+          
+        // getBalance();
+
+        const Contract = truffleContract(CryptoStation);
+        Contract.setProvider(web3.currentProvider);
+
+        Contract.deployed().then(function(instance) {
+            const getTotalSupply = async () => {
+                const res = await totalSupply(instance);
+                console.log(res);
+            }
+            getTotalSupply();
+        })
         response.json(true);
     });
  
@@ -54,4 +90,5 @@ app.use("/api", (function () {
  
 // start web applicaiton.
 console.log("start");
-app.listen(process.env.PORT);
+app.listen(3000);
+// app.listen(process.env.PORT);
