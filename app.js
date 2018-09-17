@@ -81,7 +81,7 @@ app.use("/api", (function () {
                 }
                 response.json(array);
             }
-
+            
             const tokenOfOwnerByIndex = async (i) => {
                 return instance.tokenOfOwnerByIndex(address, i);
             }
